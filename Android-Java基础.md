@@ -6,7 +6,7 @@
 
 .java的源文件 通过编译器compiler 编译成 .class的字节码文件，通过解释器interpreter解释成具体平台上的机器语言。从而实现一次编译到处实行。
 
-<img src="Android-Java基础.assets/Screen Shot 2021-01-15 at 3.23.16 pm.png" alt="Screen Shot 2021-01-15 at 3.23.16 pm" width="800" />
+<img src="Android-Java基础.assets/Screen Shot 2021-01-15 at 3.23.16 pm.png" alt="Screen Shot 2021-01-15 at 3.23.16 pm" width="800"/>
 
 ### JVM/Java虚拟机
 
@@ -28,7 +28,7 @@ Java Deleopment Kit 里面有一些命令，可以帮助操作
 **JRE VS JDK** ：如果只需要运行Java程序，下载安装JRE即可，如果要开发Java软件，需要下载JDK。
 sum：JDK面对developer，JRE面对用户
 
-<img src="Android-Java基础.assets/Screen Shot 2021-01-15 at 3.33.41 pm.png" alt="Screen Shot 2021-01-15 at 3.33.41 pm" width="300" />
+<img src="Android-Java基础.assets/Screen Shot 2021-01-15 at 3.33.41 pm.png" alt="Screen Shot 2021-01-15 at 3.33.41 pm" width="300"/>
 
 
 
