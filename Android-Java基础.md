@@ -44,9 +44,5 @@ JavaME：Java微型版，用于移动设备开发；在android/ios兴起后，�
 
 
 
-
-
-
-
-<img src="Android-Java基础.assets/Screen Shot 2021-01-17 at 9.31.56 pm.png" alt="Screen Shot 2021-01-17 at 9.31.56 pm" width="300" />
+![Screen Shot 2021-01-17 at 9.41.17 pm](Android-Java基础.assets/Screen Shot 2021-01-17 at 9.41.17 pm.png)
 
