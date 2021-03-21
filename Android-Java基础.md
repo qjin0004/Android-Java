@@ -3641,6 +3641,202 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+## Fragment
+
+多size屏幕运用，fragment表示碎片的意思；pad一次可以放两个碎片，手机只能一次一个，因为屏幕大小的问题。所以应用了fragment让app在更多的设备上能够复用。i.e. 左边列表右边显示内容（navigation）列表显示分Fragment，通过列表改变显示
+
+一个Activity可以运行多个Fragment，Fragment不能脱离activity存在，一个Fragment也可以运行在多个activity中，fragment可以被看作是 activity/屏幕主题 的一个 组成元素 / 控件
+
+### fragment的生命周期
+
+onAttach()：绑定acivity，fragment不能脱离ac
+
+onCreate() 
+
+onCreateView()：fragment创建视图
+
+onActivityCreate()：ac完成创建后，回调这个方法告诉fragment到哪一步了
+
+
+
+onStart()
+
+onResume()
+
+onPause()
+
+onStop()
+
+
+
+onDestoryView()：fragment视图被移除
+
+onDestory()
+
+onDetach()：取消关联‘
+
+启动：
+
+<img src="Android-Java基础.assets/Screen Shot 2021-03-21 at 5.03.40 pm.png" alt="Screen Shot 2021-03-21 at 5.03.40 pm" style="zoom:50%;" />
+
+back返回：
+
+<img src="Android-Java基础.assets/Screen Shot 2021-03-21 at 5.04.50 pm.png" alt="Screen Shot 2021-03-21 at 5.04.50 pm" style="zoom:50%;" />
+
+
+
+### fragment加载方式：
+
+#### 静态加载：
+
+更新xml文件引入 \<fragment /> 组建，创建Fragment class保留onCreateView()方法。在fragment组建中设置对应id，和name（值为包名下对应的fragment class , i.e. "com.example.fragmentdemo.Fragment1" ）
+
+
+
+#### 动态加载：
+
+1. 在页面所有的activity的xml文件中引入 \<FrameLayout />
+
+   ```xml
+   <FrameLayout
+       android:id="@+id/container"
+       android:layout_width="200dp"
+       android:layout_height="200dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+   ```
+
+2. 创建新的fragment class继承自Fragment并且生成对应的xml文件
+
+   ```java
+   public class Fragment1 extends Fragment {
+       @Override
+       public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState) {
+           // Inflate the layout for this fragment
+           return inflater.inflate(R.layout.fragment_1, container, false);
+       }
+   }
+   ```
+
+   FragmentManager管理器，FragmentTransaction事务（动态添加fragment就是添加事务的过程一样）
+
+   ```java
+   //在activity中
+   public class MainActivity extends AppCompatActivity {
+       @Override
+       protected void onCreate(Bundle savedInstanceState) {
+           super.onCreate(savedInstanceState);
+           setContentView(R.layout.fragment_demo);
+           //1。获取Fragment管理器
+           FragmentManager fragmentManager = getSupportFragmentManager();
+           //2。获取Fragment事务（/开启事务）
+           FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+           //3。动态添加Fragment, 参数1：容器id，fragment对象
+           final Fragment f1 = new Fragment1();
+           fragmentTransaction.add(R.id.container,f1);
+           //4。提交事务
+           fragmentTransaction.commit();
+       }
+   }
+   ```
+
+   
+
+
+
+## 屏幕适配
+
+**屏幕尺寸：**对角线的长度，单位英寸，1英寸=2.54厘米
+
+**屏幕分辨率：**在横纵向上的像素点数，单位是px，1px=1个像素点，一般以纵向像素\*横向像素 i.e. 1960\*1080
+
+**屏幕像素密度**：每英寸上的像素点数 单位dpi (dot per inch)，尺寸一定，像素点越多，密度越大。
+
+在尺寸一定的情况下，分辨率越高，屏幕越清晰，屏幕像素密度越大
+
+例子，像素密度440dpi；先计算对角线上的像素点数，再计算每英寸
+
+<img src="Android-Java基础.assets/Screen Shot 2021-03-20 at 4.32.06 pm.png" alt="Screen Shot 2021-03-20 at 4.32.06 pm" style="zoom:50%;" />
+
+### 像素单位：
+
+* **px**：pixel像素，1px代表屏幕上一个物理的像素点
+
+* **dip，dp**：density independent pixels 表示 密度无关像素。
+
+  在屏幕像素密度为160dpi的情况下 1dp = 1px，320dpi的情况下 1dp=2px
+
+  1dp = （像素密度/160dpi）* 1px
+
+  **pxValue = （像素密度/160dpi）* 实际有的dpValue  -----  来求有多少个像素点？ 像素 = 密度比*dp**  
+
+  density密度：（像素密度/160dpi）----  没有单位，单纯的密度比例
+
+* **sp**：scaled pixels，与dp类似，用于设置**字体大小**
+
+
+
+### dp的范围划分
+
+针对不同的屏幕给出不同的设置
+
+| 名称    | 中文          | 像素密度范围   |
+| ------- | ------------- | -------------- |
+| mdpi    | middle 中密度 | 120dpi～160dpi |
+| hdpi    | high 高密度   | 160dpi～240dpi |
+| xhdpi   | 超高密度      | 240dpi～320dpi |
+| xxhdpi  | 超超高密度    | 320dpi～480dpi |
+| xxxhdpi | 最高密度      | 480dpi～640dpi |
+
+根据不同密度层次给出相应的密度的图片
+
+### 屏幕适配：
+
+#### 布局适配：
+
+* 禁用绝对布局
+
+* 少用px  
+
+  * 如果要给空间做具体的大小设定时，尽可能使用dp/dip
+
+* 宽高尽量使用wrap_content，match_parent，涉及比例尽量使用layout_weight
+
+  * wrap_content: 首先按照内容的多少去设定空间大小，然后按照权重的比例分配剩余控件。也就是说如果内容很短 长度小于权重，则按照权重进行设置。如果内容很长 大于权重计算后的值，则按照内容设置
+
+  * match_parent：控件大小 = 父容器大小 + 权重**比例**\* 剩余空间大小(父-全子)
+
+    例子：此时红宽match_parent，weight1；蓝宽match_parent，weight2；
+
+    ![Screen Shot 2021-03-20 at 5.11.53 pm](Android-Java基础.assets/Screen Shot 2021-03-20 at 5.11.53 pm.png)
+
+  * 换成宽度0dp，直接按照设定的weight比例分配空间
+
+* 根据不同的屏幕简历相应布局文件
+
+
+
+#### 图片适配
+
+使用自动拉伸图 .9图 ---  扩展名 .9.png，并且在图片保证不模糊的前提下自适应
+
+找到图片，右键 create 9-patch file，会得到一个编辑区和三个图。
+
+**在编辑区的图片的左上随意拉伸表明可被拉伸的区域**：可以得到一条黑线，黑线表明可被拉伸的上下范围。
+
+<img src="Android-Java基础.assets/Screen Shot 2021-03-21 at 4.17.19 pm.png" alt="Screen Shot 2021-03-21 at 4.17.19 pm" style="zoom:50%;" />
+
+在编辑区的图片右下区域拉伸，表明内容显示在什么区域（通常作为background image）
+
+
+
+
+
+
+
 
 
 
